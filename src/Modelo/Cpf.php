@@ -6,22 +6,16 @@ class Cpf
 {
   private string $cpf;
 
-  // Inicializando a classe
-
   public function __construct(string $cpf)
   {
     $this->cpf = $cpf;
     $this->validaCpf();
   }
 
-  // Convertendo o CPF para string depois da execução
-
   public function getNumeroCpf()
   {
     return $this->cpf;
   }
-
-  // A mágica acontece aqui:
 
   private function validaCpf()
   {
@@ -29,17 +23,15 @@ class Cpf
     $primeiroDigito = $this->validaPrimeiroDigito();
     $segundoDigito = $this->validaSegundoDigito($primeiroDigito);
 
-    $cpfOriginal = preg_replace('/\W/', '', $this->cpf);
-    $cpfCompleto = $cpfLimpo . $primeiroDigito . $segundoDigito; // Concatenando o CPF incompleto com os dígitos.
+    $cpfFromInput = preg_replace('/\W/', '', $this->cpf);
+    $cpfCompleto = $cpfLimpo . $primeiroDigito . $segundoDigito;
 
-    if ($cpfOriginal != $cpfCompleto) { // Verificando se o CPF validado é idêntico ao do input
-      throw new \Exception('CPF inválido'); // Exceção e erro em caso de CPF inválido
+    if ($cpfFromInput != $cpfCompleto) {
+      throw new \Exception('CPF inválido');
     } else {
-      echo 'O CPF é válido!' . PHP_EOL;
+      echo "O cpf $cpfCompleto é válido e correto." . PHP_EOL;
     }
   }
-
-  // Separando responsabilidades: um método para cada um dos dois dígitos
 
   private function validaPrimeiroDigito()
   {
@@ -50,12 +42,10 @@ class Cpf
 
   private function validaSegundoDigito($primeiroDigito)
   {
-    $cpfLimpo = $this->limpaCpf() . $primeiroDigito; // Concatena o primeiro dígito calculado para realizar o segundo cálculo
+    $cpfLimpo = $this->limpaCpf() . $primeiroDigito;
     $multiplicador = 11;
     return $this->calcularDigito($cpfLimpo, $multiplicador);
   }
-
-  // Calcula o dígito verificador do CPF.
 
   private function calcularDigito($cpfLimpo, $multiplicador)
   {
@@ -65,10 +55,16 @@ class Cpf
       $soma += (int)$cpfLimpo[$i] * ($multiplicador--);
     }
 
-    $digito = 11 - ($soma % 11);
+    $divisaoResto = $soma % 11;
+
+    if ($divisaoResto < 2) {
+      $divisaoResto = 0;
+    }
+
+    $digito = 11 - $divisaoResto;
 
     if ($digito > 10) {
-      $digito = 0;                          // Caso o resto da divisão seja maior que 10, é atribuído o valor 0
+      $digito = 0;
     }
 
     return $digito;
@@ -76,8 +72,8 @@ class Cpf
 
   private function limpaCpf()
   {
-    $cpfSemDigitos = strstr($this->cpf, '-', true); // Retirando os dígitos verificadores
-    $cpfLimpo = preg_replace('/\W/', '', $cpfSemDigitos); // Retirando pontos e qualquer outro caractere especial do input
+    $cpfSemDigitos = strstr($this->cpf, '-', true);
+    $cpfLimpo = preg_replace('/\W/', '', $cpfSemDigitos);
 
     return $cpfLimpo;
   }
