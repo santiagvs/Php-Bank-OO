@@ -72,10 +72,22 @@ class Cpf
 
   private function limpaCpf()
   {
+    $this->checarFormatoCpf();
     $cpfSemDigitos = strstr($this->cpf, '-', true);
     $cpfLimpo = preg_replace('/\W/', '', $cpfSemDigitos);
 
     return $cpfLimpo;
+  }
+
+  private function checarFormatoCpf(): bool
+  {
+    $cpfPadrao = preg_match('/\d{3}\.\d{3}\.\d{3}\-\d{2}/', $this->cpf);
+
+    if (!$cpfPadrao) {
+      throw new \Exception("CPF $cpfPadrao se encontra em formato inválido.");
+    }
+
+    return true;
   }
 }
 
