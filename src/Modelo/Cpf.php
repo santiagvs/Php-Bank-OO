@@ -28,8 +28,6 @@ class Cpf
 
     if ($cpfFromInput != $cpfCompleto) {
       throw new \Exception('CPF inválido');
-    } else {
-      echo "O cpf $cpfCompleto é válido e correto." . PHP_EOL;
     }
   }
 
