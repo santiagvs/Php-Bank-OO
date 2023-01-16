@@ -90,5 +90,3 @@ class Cpf
     return true;
   }
 }
-
-// ^\d{3}\.\d{3}\.\d{3}\-\d{2}$ matches Cpf
